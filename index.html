@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Men’s Бабаюрт</title>
+<meta name="description" content="Men’s — магазин мужской одежды в Бабаюрте: костюмы, рубашки, поло, трикотаж, верхняя одежда и обувь. ул. Шпигуна, 47.">
+<meta name="theme-color" content="#0C0E0F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head><body>
+<style>
+/* Layout: the store's own signboard (black slate + gold letters) is the hero; the site then walks the visitor
+   through the shop like a real visit — rail of clothes, the hall, the shoe wall, sizes, reviews, the door. */
+:root{
+  --ink:#0C0E0F;        /* night black */
+  --slate:#171C1F;      /* signboard slate */
+  --slate-2:#20272B;
+  --line:#2E373C;
+  --gold:#D6B05A;       /* sign letters */
+  --gold-hi:#F3D98E;
+  --gold-lo:#8A6728;
+  --cream:#EDE6D9;      /* marble walls inside */
+  --cream-2:#DED3BF;
+  --wine:#4A1D1A;       /* the brown-red door */
+  --sand:#CBB487;       /* facade stone */
+  --text:#ECE6DA;
+  --muted:#9AA1A3;
+  --on-cream:#1A1F22;
+  --on-cream-muted:#5F625F;
+
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-serif:"Cormorant Garamond","Georgia","Times New Roman",serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Consolas",monospace;
+
+  --gutter:clamp(16px,4vw,56px);
+  --radius:2px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--ink)}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{margin:0;background:var(--ink);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+h1,h2,h3,h4{margin:0;font-weight:500;line-height:1.05;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1360px;margin-inline:auto;padding-inline:var(--gutter)}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.serif{font-family:var(--f-serif);font-style:italic;font-weight:500;letter-spacing:-.01em}
+.gold{color:var(--gold)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* grain */
+.grain{pointer-events:none;position:fixed;inset:-50%;z-index:90;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-2%)}60%{transform:translate(-2%,-4%)}80%{transform:translate(4%,2%)}100%{transform:translate(0,0)}}
+
+/* cursor */
+.cursor{position:fixed;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:100;mix-blend-mode:difference;transition:width .25s,height .25s,margin .25s,background .25s;display:none}
+.cursor.big{width:56px;height:56px;margin:-28px 0 0 -28px;background:var(--gold-hi)}
+@media (hover:hover) and (pointer:fine){.cursor{display:block}}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .35s,transform .45s}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:72px}
+.nav.solid{background:rgba(12,14,15,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav.hide{transform:translateY(-100%)}
+.brand{font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.06em;text-decoration:none;color:var(--gold);display:flex;align-items:baseline;gap:10px}
+.brand small{font-family:var(--f-mono);font-weight:400;font-size:10px;letter-spacing:.3em;color:var(--muted)}
+.nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-size:14px}
+.nav ul a{text-decoration:none;color:var(--muted);transition:color .2s}
+.nav ul a:hover{color:var(--text)}
+.nav-cta{display:flex;align-items:center;gap:10px}
+@media (max-width:960px){.nav ul{display:none}}
+@media (max-width:640px){.nav .status{display:none}.sign-stage{height:clamp(200px,52vw,320px);margin-top:16px}}
+
+.btn{--b:var(--gold);display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 24px;border-radius:999px;border:1px solid var(--b);background:var(--b);color:var(--ink);font-weight:700;font-size:15px;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background .25s,color .25s,border-color .25s;will-change:transform}
+.btn:hover{background:var(--gold-hi);border-color:var(--gold-hi)}
+.btn.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn.sm{padding:10px 18px;font-size:14px}
+.btn svg{width:18px;height:18px;flex:none}
+.on-cream .btn.ghost{color:var(--on-cream);border-color:rgba(26,31,34,.25)}
+
+/* status chip */
+.status{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.status i{width:8px;height:8px;border-radius:50%;background:#6FCF7B;box-shadow:0 0 0 4px rgba(111,207,123,.15)}
+.status.closed i{background:#D9675B;box-shadow:0 0 0 4px rgba(217,103,91,.15)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;padding-top:calc(96px + env(safe-area-inset-top,0px));padding-bottom:56px;overflow:hidden;background:
+  radial-gradient(70% 60% at 50% 30%,rgba(214,176,90,.10),transparent 70%),var(--ink)}
+.hero-top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+.sign-stage{position:relative;margin-top:28px;height:clamp(240px,40vw,560px)}
+.sign-stage canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
+.sign-fallback{position:absolute;inset:0;display:grid;place-items:center}
+.sign-fallback .board{background:linear-gradient(180deg,#1f2629,#151a1c);padding:4% 7% 3%;border-radius:4px;box-shadow:0 30px 80px -30px #000,inset 0 1px 0 rgba(255,255,255,.06);text-align:center}
+.sign-fallback .letters{font-family:var(--f-display);font-weight:700;font-size:clamp(56px,13vw,180px);letter-spacing:.02em;line-height:1;background:linear-gradient(180deg,var(--gold-hi),var(--gold) 45%,var(--gold-lo));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sign-fallback .sub{font-family:var(--f-mono);letter-spacing:.6em;font-size:clamp(10px,1.4vw,16px);color:#cfd3d2;margin-top:10px}
+.webgl-on .sign-fallback{display:none}
+.hero-bottom{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end;margin-top:28px}
+.hero h1{font-family:var(--f-display);font-weight:500;font-size:clamp(34px,5.6vw,84px);letter-spacing:-.02em}
+.hero h1 .serif{display:block;color:var(--gold);font-size:1.18em;line-height:.95;font-weight:500}
+.hero-side{display:grid;gap:22px;justify-items:start}
+.hero-side p{color:var(--muted);max-width:34em}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.ribbon{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 10px;border:1px solid rgba(214,176,90,.4);border-radius:999px;font-size:13px;color:var(--gold-hi);background:rgba(214,176,90,.06)}
+.ribbon b{background:var(--gold);color:var(--ink);border-radius:999px;padding:2px 8px;font-size:11px;letter-spacing:.06em}
+.scroll-hint{position:absolute;right:var(--gutter);bottom:20px;writing-mode:vertical-rl;color:var(--muted)}
+@media (max-width:860px){.hero-bottom{grid-template-columns:1fr}.scroll-hint{display:none}}
+
+/* ---------- TICKER ---------- */
+.ticker{border-block:1px solid var(--line);background:var(--slate);overflow:hidden;padding-block:18px}
+.ticker-track{display:flex;width:max-content;gap:0;animation:tick 38s linear infinite}
+.ticker span{font-family:var(--f-display);font-weight:400;font-size:clamp(18px,2.2vw,28px);letter-spacing:.04em;padding-inline:28px;white-space:nowrap;color:var(--text);display:flex;align-items:center;gap:56px}
+.ticker span::after{content:"";width:9px;height:9px;transform:rotate(45deg);background:var(--gold)}
+.ticker span:nth-child(odd){font-family:var(--f-serif);font-style:italic;font-size:clamp(22px,2.6vw,34px);color:var(--gold-hi)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- SECTION BASE ---------- */
+section{position:relative}
+.sec{padding-block:clamp(72px,10vw,140px)}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:16px 48px;align-items:end;margin-bottom:clamp(36px,5vw,64px)}
+.sec-head h2{font-family:var(--f-display);font-weight:500;font-size:clamp(32px,5vw,72px);letter-spacing:-.02em}
+.sec-head h2 .serif{color:var(--gold);font-size:1.12em}
+.sec-head p{color:var(--muted);max-width:36em;justify-self:end}
+.on-cream .sec-head p{color:var(--on-cream-muted)}
+.sec-head .mono{grid-column:1/-1;color:var(--gold)}
+.on-cream .sec-head .mono{color:var(--gold-lo)}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr}.sec-head p{justify-self:start}}
+
+.on-cream{background:var(--cream);color:var(--on-cream)}
+.on-cream .sec-head h2 .serif{color:var(--gold-lo)}
+
+/* gold mirror frame (from the hall mirror) */
+.frame{position:relative;padding:10px;background:linear-gradient(135deg,#9c7a33,#f0d48a 30%,#a9843a 55%,#e8c877 80%,#8a6728);box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+.frame::after{content:"";position:absolute;inset:6px;border:1px solid rgba(60,40,10,.55);pointer-events:none}
+.frame img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- CLASSIC vs CASUAL ---------- */
+.versus{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(32px,5vw,80px);align-items:center}
+.vs-copy h2{font-size:clamp(36px,5.4vw,80px);font-family:var(--f-display);font-weight:500;letter-spacing:-.02em}
+.vs-copy h2 .serif{display:block;color:var(--gold);font-size:1.15em}
+.vs-copy p{color:var(--muted);margin-top:22px;max-width:30em}
+.vs-legend{display:flex;gap:26px;margin-top:30px;flex-wrap:wrap}
+.vs-legend div{display:grid;gap:2px}
+.vs-legend b{font-family:var(--f-serif);font-style:italic;font-size:30px;font-weight:500;color:var(--text)}
+.vs-legend b.g{font-family:var(--f-display);font-style:normal;font-size:22px;letter-spacing:.06em}
+.compare{position:relative;aspect-ratio:3/4;max-height:78vh;width:100%;max-width:620px;justify-self:center;overflow:hidden;cursor:ew-resize;touch-action:pan-y;user-select:none}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.compare .top{clip-path:inset(0 calc(100% - var(--x,50%)) 0 0)}
+.compare .handle{position:absolute;top:0;bottom:0;left:var(--x,50%);width:2px;background:var(--gold);transform:translateX(-1px)}
+.compare .knob{position:absolute;top:50%;left:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:var(--gold);color:var(--ink);display:grid;place-items:center;font-family:var(--f-mono);font-size:12px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.compare .tag{position:absolute;bottom:18px;padding:6px 12px;background:rgba(12,14,15,.72);backdrop-filter:blur(6px);border-radius:999px;font-size:13px}
+.compare .tag.l{left:18px;font-family:var(--f-serif);font-style:italic;font-size:18px}
+.compare .tag.r{right:18px;font-family:var(--f-display);letter-spacing:.06em}
+@media (max-width:860px){.versus{grid-template-columns:1fr}}
+
+/* ---------- RAIL (catalogue) ---------- */
+.rail-sec{background:linear-gradient(180deg,var(--ink),var(--slate) 30%,var(--slate))}
+.rail-pin{position:relative;overflow:hidden}
+.rail-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.rail-count{color:var(--muted)}
+.bag-price{font-size:13px;color:var(--muted)}
+.rail-filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:9px 16px;font-size:14px;cursor:pointer;color:var(--muted);transition:all .2s}
+.chip:hover{color:var(--text);border-color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:700}
+.rail-viewport{position:relative;margin-top:36px;padding-top:54px}
+.rail-bar{position:absolute;top:28px;left:0;right:0;height:8px;border-radius:8px;background:linear-gradient(180deg,#f4f4f2,#9ea3a5 45%,#e6e8e8 60%,#7b8083);box-shadow:0 6px 14px rgba(0,0,0,.45)}
+.rail-track{display:flex;gap:clamp(18px,2.4vw,34px);width:max-content;padding-inline:var(--gutter);padding-bottom:30px}
+.item{position:relative;width:clamp(230px,22vw,310px);flex:none;transform-origin:50% -40px;transform:rotate(var(--swing,0deg))}
+.hanger{position:absolute;top:-58px;left:50%;width:110px;height:64px;transform:translateX(-50%);pointer-events:none}
+.item-card{position:relative;background:var(--slate-2);overflow:hidden;aspect-ratio:3/4;border-radius:var(--radius)}
+.item-card img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.item:hover .item-card img{transform:scale(1.05)}
+.price-tag{position:absolute;top:18px;right:-6px;transform-origin:85% 0;transform:rotate(var(--tag,6deg));background:var(--cream);color:var(--on-cream);padding:12px 14px 10px 22px;font-family:var(--f-mono);font-size:12px;line-height:1.3;clip-path:polygon(12px 0,100% 0,100% 100%,12px 100%,0 50%);box-shadow:0 6px 16px rgba(0,0,0,.35);min-width:108px}
+.price-tag::before{content:"";position:absolute;left:8px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:var(--slate)}
+.price-tag b{display:block;font-family:var(--f-display);font-size:16px;font-weight:600;letter-spacing:0}
+.item-meta{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-top:14px}
+.item-meta h3{font-family:var(--f-body);font-weight:700;font-size:16px;line-height:1.3}
+.item-meta p{color:var(--muted);font-size:13px;margin-top:3px}
+.keep{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:transparent;display:grid;place-items:center;cursor:pointer;transition:all .2s}
+.keep svg{width:18px;height:18px}
+.keep:hover{border-color:var(--gold);color:var(--gold)}
+.keep[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.rail-progress{height:2px;background:var(--line);margin-top:6px;position:relative}
+.rail-progress i{position:absolute;inset:0 auto 0 0;width:var(--p,0%);background:var(--gold)}
+.rail-note{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;color:var(--muted);font-size:14px}
+@media (max-width:860px){
+  .rail-viewport{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .rail-viewport::-webkit-scrollbar{display:none}
+  .rail-bar{width:var(--track-w,100%);right:auto}
+  .item{scroll-snap-align:center}
+}
+
+/* selection drawer */
+.bag-btn{position:fixed;right:var(--gutter);bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:10px;padding:14px 20px;border-radius:999px;background:var(--gold);color:var(--ink);border:0;font-weight:700;cursor:pointer;box-shadow:0 16px 40px rgba(0,0,0,.45);transform:translateY(0);transition:transform .35s}
+.bag-btn[hidden]{display:none!important}
+.bag-btn .n{background:var(--ink);color:var(--gold);border-radius:999px;min-width:24px;height:24px;display:grid;place-items:center;font-size:12px;padding-inline:6px}
+.drawer-veil{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;backdrop-filter:blur(3px)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--slate);border-left:1px solid var(--line);z-index:71;display:flex;flex-direction:column;padding:calc(22px + env(safe-area-inset-top,0px)) 24px calc(22px + env(safe-area-inset-bottom,0px));overflow:auto}
+.drawer header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.drawer h3{font-family:var(--f-display);font-size:24px}
+.x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:20px;line-height:1}
+.bag-list{display:grid;gap:12px}
+.bag-row{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:4px}
+.bag-row img{width:64px;height:80px;object-fit:cover}
+.bag-row b{display:block;font-size:14px}
+.bag-row input{margin-top:6px;width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:4px;padding:7px 9px;font:13px var(--f-body)}
+.bag-row button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:13px}
+.field{display:grid;gap:6px;margin-top:16px}
+.field label{font-size:13px;color:var(--muted)}
+.field input,.field select,.field textarea{background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:4px;padding:12px 14px;font:15px var(--f-body)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg button{padding:11px;border-radius:4px;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:14px}
+.seg button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);background:rgba(214,176,90,.08)}
+.drawer .send{margin-top:22px;width:100%}
+.drawer small{display:block;color:var(--muted);margin-top:10px;font-size:12px;text-align:center}
+.empty{color:var(--muted);padding:24px 0}
+
+/* ---------- HALL TOUR ---------- */
+.tour{display:grid;grid-template-columns:320px 1fr;gap:clamp(24px,4vw,64px);align-items:start}
+.tour-tabs{display:grid;gap:4px;position:sticky;top:100px}
+.tour-tab{text-align:left;padding:18px 0;border:0;border-top:1px solid rgba(26,31,34,.15);background:none;cursor:pointer;display:grid;grid-template-columns:40px 1fr;gap:6px 10px;color:var(--on-cream-muted)}
+.tour-tab .mono{color:var(--gold-lo);padding-top:6px}
+.tour-tab b{font-family:var(--f-display);font-weight:500;font-size:22px;color:var(--on-cream-muted);transition:color .2s}
+.tour-tab span.d{grid-column:2;font-size:14px}
+.tour-tab[aria-selected="true"] b{color:var(--on-cream)}
+.tour-tab[aria-selected="true"]{border-top-color:var(--on-cream)}
+.tour-stage{position:relative}
+.tour-img{position:relative;aspect-ratio:3/4;max-height:86vh;margin-inline:auto;overflow:hidden}
+.tour-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.04)}
+.spot{position:absolute;transform:translate(-50%,-50%);z-index:2}
+.spot button{display:block;width:16px;height:16px;padding:0;border-radius:50%;border:3px solid var(--ink);background:var(--gold);cursor:pointer;box-shadow:0 0 0 2px var(--gold),0 4px 12px rgba(0,0,0,.45);transition:transform .2s}
+.spot button:hover,.spot.show button{transform:scale(1.25)}
+.spot span{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);white-space:nowrap;max-width:min(220px,60vw);overflow:hidden;text-overflow:ellipsis;background:var(--ink);color:var(--text);font-size:13px;line-height:1.3;padding:6px 10px;border-radius:4px;pointer-events:none;opacity:0;transition:opacity .2s}
+.spot.al span{left:-6px;transform:none}
+.spot.ar span{left:auto;right:-6px;transform:none}
+.spot.below span{bottom:auto;top:calc(100% + 10px)}
+.spot:hover span,.spot:focus-within span,.spot.show span{opacity:1}
+@media (max-width:860px){.tour{grid-template-columns:1fr}.tour-tabs{position:static;grid-template-columns:repeat(3,1fr)}.tour-tab{grid-template-columns:1fr}.tour-tab span.d{display:none}.tour-tab .mono{padding:0}.tour-tab b{font-size:14px;overflow-wrap:anywhere}}
+
+/* ---------- WHY ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line)}
+.stat{padding:34px 24px;border-right:1px solid var(--line);display:grid;gap:8px}
+.stat:last-child{border-right:0}
+.stat b{font-family:var(--f-display);font-weight:500;font-size:clamp(40px,5vw,72px);line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:14px}
+@media (max-width:860px){.stats{grid-template-columns:1fr 1fr}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:clamp(48px,6vw,80px);border:1px solid var(--line)}
+.why article{background:var(--ink);padding:36px 30px;display:grid;gap:14px;align-content:start;min-height:280px;position:relative;overflow:hidden}
+.why article .mono{color:var(--gold)}
+.why h3{font-family:var(--f-display);font-weight:500;font-size:26px}
+.why p{color:var(--muted)}
+.why article::after{content:"";position:absolute;inset:auto -20% -60% -20%;height:70%;background:radial-gradient(50% 50% at 50% 50%,rgba(214,176,90,.18),transparent 70%);opacity:0;transition:opacity .4s}
+.why article:hover::after{opacity:1}
+@media (max-width:860px){.why{grid-template-columns:1fr}.why article{min-height:0}}
+.promo{margin-top:clamp(48px,6vw,80px);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:clamp(28px,4vw,48px);background:linear-gradient(110deg,#a7822f,#f1d58b 40%,#b88f3c 70%,#e5c472);color:var(--ink);border-radius:var(--radius)}
+.promo h3{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3.4vw,46px);letter-spacing:-.01em}
+.promo p{margin-top:8px;font-weight:600;opacity:.8}
+.promo .btn{--b:var(--ink);color:var(--gold-hi)}
+.promo .btn:hover{background:#000;border-color:#000}
+@media (max-width:700px){.promo{grid-template-columns:1fr}}
+
+/* ---------- SIZES ---------- */
+.sizes{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(24px,4vw,56px);align-items:start}
+.finder{background:var(--on-cream);color:var(--cream);padding:clamp(24px,3vw,40px);border-radius:var(--radius)}
+.finder h3{font-family:var(--f-display);font-weight:500;font-size:24px}
+.finder .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.finder label{display:block;font-size:13px;color:#b8b2a6;margin-bottom:6px}
+.finder input[type=range]{width:100%;accent-color:var(--gold)}
+.finder output{font-family:var(--f-mono);font-size:14px;color:var(--gold-hi)}
+.result{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:26px;padding-top:24px;border-top:1px dashed rgba(236,230,218,.25)}
+.result div{min-width:0}
+.result b{display:block;font-family:var(--f-display);font-weight:500;font-size:clamp(30px,3.6vw,46px);color:var(--gold);line-height:1.1;font-variant-numeric:tabular-nums}
+.result span{font-size:12px;color:#b8b2a6}
+.finder .hint{font-size:13px;color:#b8b2a6;margin-top:18px}
+.tbl{overflow-x:auto;border:1px solid rgba(26,31,34,.15);background:#F5F0E7}
+table{border-collapse:collapse;width:100%;font-family:var(--f-mono);font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid rgba(26,31,34,.1);white-space:nowrap}
+th{font-weight:500;color:var(--on-cream-muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+tr.on td{background:var(--on-cream);color:var(--gold-hi)}
+@media (max-width:860px){.sizes{grid-template-columns:1fr}}
+
+/* ---------- REVIEWS ---------- */
+.reviews{overflow:hidden}
+.rv-row{display:flex;width:max-content;gap:18px;animation:tick 70s linear infinite}
+.rv-row.rev{animation-direction:reverse;margin-top:18px}
+.reviews:hover .rv-row{animation-play-state:paused}
+.rv{width:360px;flex:none;background:#F7F2E9;border:1px solid rgba(26,31,34,.1);padding:24px;display:grid;gap:14px;align-content:space-between;min-height:200px}
+.rv p{font-family:var(--f-serif);font-size:21px;line-height:1.35;color:var(--on-cream)}
+.rv footer{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--on-cream-muted)}
+.rv footer b{color:var(--on-cream);font-weight:700}
+.rv .st{color:var(--gold-lo);letter-spacing:2px}
+.rv-score{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.rv-score b{font-family:var(--f-display);font-weight:500;font-size:clamp(64px,8vw,120px);line-height:.9;color:var(--on-cream)}
+.rv-score div{color:var(--on-cream-muted);font-size:14px}
+.rv-score .st{color:var(--gold-lo);font-size:22px;letter-spacing:3px}
+
+/* ---------- SERVICE ---------- */
+.service{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.svc{background:var(--ink);padding:28px 24px;display:grid;gap:12px;align-content:start}
+.svc svg{width:30px;height:30px;stroke:var(--gold);fill:none;stroke-width:1.4}
+.svc h3{font-family:var(--f-body);font-weight:700;font-size:17px;line-height:1.3}
+.svc p{color:var(--muted);font-size:14px}
+@media (max-width:960px){.service{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.service{grid-template-columns:1fr}}
+.pay{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.pay span{border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;color:var(--text)}
+
+/* ---------- VISIT ---------- */
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px);align-items:start}
+.visit .frame{aspect-ratio:3/4;max-width:540px}
+.visit h2{font-family:var(--f-display);font-weight:500;font-size:clamp(34px,5vw,72px);letter-spacing:-.02em}
+.visit h2 .serif{color:var(--gold);display:block;font-size:1.12em}
+.addr{margin-top:26px;display:grid;gap:0;border-top:1px solid var(--line)}
+.addr-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.addr-row .mono{color:var(--muted);display:block;margin-bottom:4px;font-size:11px}
+.addr-row .v{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;user-select:all}
+.copy{border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}
+.copy:hover{border-color:var(--gold);color:var(--gold)}
+.hours{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
+.hours div{border:1px solid var(--line);border-radius:4px;padding:8px 4px;text-align:center;font-size:12px;color:var(--muted)}
+.hours div b{display:block;font-family:var(--f-mono);font-weight:500;color:var(--text);font-size:12px}
+.hours div.today{border-color:var(--gold);color:var(--gold)}
+.visit-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+@media (max-width:860px){.visit{grid-template-columns:1fr}.hours{grid-template-columns:repeat(4,1fr)}}
+
+/* ---------- FOOTER ---------- */
+.foot{padding-block:80px calc(110px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);overflow:hidden}
+.big-word{display:block;width:100%;height:auto;overflow:visible}
+.big-word .o{fill:none;stroke:rgba(214,176,90,.55);stroke-width:6}
+.big-word .f{fill:url(#bwGold)}
+.foot-row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:40px;color:var(--muted);font-size:14px}
+.foot-row a{text-decoration:none}
+.foot-row a:hover{color:var(--gold)}
+
+/* mobile bar */
+.mbar{display:none}
+@media (max-width:640px){
+  .mbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:55;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(12,14,15,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+  .bag-btn{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}
+
+/* text reveal helpers */
+.line-mask{display:block;overflow:hidden}
+.line-mask > span{display:block}
+
+@media (prefers-reduced-motion:reduce){
+  .ticker-track,.rv-row,.grain{animation:none}
+}
+
+h1,h2,h3{overflow-wrap:break-word;min-width:0}
+.wrap > *{min-width:0}
+@media (max-width:640px){.rv{width:min(300px,80vw);min-height:0;padding:18px}.rv p{font-size:18px}.rv-row{gap:12px}.rv-row.rev{margin-top:12px}}
+
+</style>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Men’s — на главную">MEN’S <small>БАБАЮРТ</small></a>
+    <nav aria-label="Разделы"><ul>
+      <li><a href="#catalog">Каталог</a></li>
+      <li><a href="#hall">Зал</a></li>
+      <li><a href="#sizes">Размеры</a></li>
+      <li><a href="#reviews">Отзывы</a></li>
+      <li><a href="#visit">Как найти</a></li>
+    </ul></nav>
+    <div class="nav-cta">
+      <span class="status" data-status><i></i><span>Сверяю график…</span></span>
+      <a class="btn sm" href="https://wa.me/79298742974" target="_blank" rel="noopener" data-magnetic>WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO: the real signboard, rebuilt in 3D -->
+  <section class="hero" aria-labelledby="h-hero">
+    <div class="wrap">
+      <div class="hero-top">
+        <span class="mono" style="color:var(--muted)">с. Бабаюрт · ул. Шпигуна, 47</span>
+        <span class="ribbon"><b>−%</b> Скидка каждому посетителю магазина</span>
+      </div>
+      <div class="sign-stage" id="sign">
+        <div class="sign-fallback" aria-hidden="true">
+          <div class="board"><div class="letters">MEN’S</div><div class="sub">МУЖСКАЯ ОДЕЖДА</div></div>
+        </div>
+      </div>
+      <div class="hero-bottom">
+        <h1 id="h-hero"><span class="line-mask"><span>Одеваем мужчин</span></span><span class="line-mask"><span class="serif">с ног до головы</span></span></h1>
+        <div class="hero-side">
+          <p>Костюмы и рубашки, поло и трикотаж, пуховики, кроссовки и туфли. Хозяйка магазина сама помогает подобрать образ, а для каждого посетителя есть скидка.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#catalog" data-magnetic>Смотреть вещи</a>
+            <a class="btn ghost" href="https://wa.me/79298742974?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9F%D0%BE%D0%BC%D0%BE%D0%B3%D0%B8%D1%82%D0%B5%20%D0%BF%D0%BE%D0%B4%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B7." target="_blank" rel="noopener" data-magnetic>Подобрать образ в WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="mono scroll-hint">листайте вниз</span>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-track">
+    <span>Костюмы</span><span>рубашки</span><span>Поло</span><span>трикотаж</span><span>Пуховики</span><span>худи</span><span>Кроссовки</span><span>туфли и лоферы</span><span>Ремни</span><span>сумки и рюкзаки</span>
+    <span>Костюмы</span><span>рубашки</span><span>Поло</span><span>трикотаж</span><span>Пуховики</span><span>худи</span><span>Кроссовки</span><span>туфли и лоферы</span><span>Ремни</span><span>сумки и рюкзаки</span>
+  </div></div>
+
+  <!-- CLASSIC vs CASUAL -->
+  <section class="sec" aria-labelledby="h-vs">
+    <div class="wrap versus">
+      <div class="vs-copy">
+        <span class="mono gold">Два гардероба в одном магазине</span>
+        <h2 id="h-vs" style="margin-top:18px">От классики <span class="serif">до casual</span></h2>
+        <p>Строгий костюм на свадьбу или в офис и удобная одежда на каждый день висят в соседних рядах. Потяните ползунок на фото: это одни и те же двери нашего магазина и два разных образа.</p>
+        <div class="vs-legend">
+          <div><b>Классика</b><span class="mono" style="color:var(--muted)">костюм · рубашка · туфли</span></div>
+          <div><b class="g">CASUAL</b><span class="mono" style="color:var(--muted)">поло · чиносы · лоферы</span></div>
+        </div>
+      </div>
+      <div class="compare frame" id="compare" role="slider" aria-label="Сравнить классический и повседневный образ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
+        <img src="assets/polo.jpg" alt="Повседневный образ: коричневое поло и брюки цвета хаки" loading="lazy">
+        <img class="top" src="assets/suit.jpg" alt="Классический образ: тёмно-синий костюм и белая рубашка" loading="lazy">
+        <div class="handle"><div class="knob">⟷</div></div>
+        <span class="tag l">Классика</span><span class="tag r">CASUAL</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOGUE: a clothing rail -->
+  <section class="sec rail-sec" id="catalog" aria-labelledby="h-cat">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="mono">Каталог · на вешалке</span>
+        <h2 id="h-cat">Снимите <span class="serif">с вешалки</span></h2>
+        <p>Отметьте вещи, которые хотите примерить. Мы отложим их до вашего прихода или привезём с доставкой. Цены, которых нет на сайте, назовём в WhatsApp за пару минут.</p>
+      </div>
+    </div>
+    <div id="catalog-app"></div>
+  </section>
+
+  <!-- HALL TOUR -->
+  <section class="sec on-cream" id="hall" aria-labelledby="h-hall">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="mono">Экскурсия по магазину</span>
+        <h2 id="h-hall">Загляните <span class="serif">внутрь</span></h2>
+        <p>Просторный зал с золотой лепниной и зеркалом в полный рост. Нажмите на точки на фото, чтобы узнать, что где лежит.</p>
+      </div>
+      <div class="tour" id="tour">
+        <div class="tour-tabs" role="tablist" aria-label="Зоны магазина">
+          <button class="tour-tab" role="tab" aria-selected="true" data-i="0"><span class="mono">01</span><b>Главный зал</b><span class="d">Поло, рубашки, брюки, джинсы, головные уборы</span></button>
+          <button class="tour-tab" role="tab" aria-selected="false" data-i="1"><span class="mono">02</span><b>Верхняя одежда</b><span class="d">Пуховики, куртки, худи, сумки и рюкзаки</span></button>
+          <button class="tour-tab" role="tab" aria-selected="false" data-i="2"><span class="mono">03</span><b>Обувная стена</b><span class="d">Туфли, лоферы, мокасины, шлёпанцы, футболки</span></button>
+        </div>
+        <div class="tour-stage">
+          <div class="tour-img frame" id="tourImg"><img src="assets/hall.jpg" alt="Главный зал магазина Men’s"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="sec" aria-labelledby="h-why">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="mono">Почему к нам возвращаются</span>
+        <h2 id="h-why">Качество, цена <span class="serif">и внимание</span></h2>
+        <p>Так о магазине говорят сами покупатели на Яндекс Картах. А это цифры, которые стоят за этими словами.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b data-count="4.8" data-dec="1">4,8</b><span>рейтинг на Яндекс Картах, 20 оценок</span></div>
+        <div class="stat"><b data-count="13">13</b><span>отзывов покупателей</span></div>
+        <div class="stat"><b data-count="7">7</b><span>дней в неделю, без выходных</span></div>
+        <div class="stat"><b data-count="710">710</b><span>метров от автостанции Бабаюрт</span></div>
+      </div>
+      <div class="why">
+        <article><span class="mono">Ткани</span><h3>Качественные материалы</h3><p>Продаём только то, что приятно носить: аккуратные швы, хороший хлопок и трикотаж.</p></article>
+        <article><span class="mono">Цены</span><h3>Доступные цены</h3><p>Хорошая одежда не должна стоить как поездка в Махачкалу. Есть рассрочка и дисконтная система.</p></article>
+        <article><span class="mono">Выбор</span><h3>Широкий ассортимент</h3><p>Одежда разных категорий для всех возрастов и стилей: от строгого костюма до кроссовок.</p></article>
+      </div>
+      <div class="promo">
+        <div><h3>Скидка для всех посетителей магазина</h3><p>Приходите в зал на Шпигуна, 47: скидку дадим на кассе.</p></div>
+        <a class="btn" href="#visit" data-magnetic>Как добраться</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIZES -->
+  <section class="sec on-cream" id="sizes" aria-labelledby="h-size">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="mono">Чтобы не ошибиться</span>
+        <h2 id="h-size">Ваш размер <span class="serif">за 10 секунд</span></h2>
+        <p>Укажите обхват груди, талии и шеи. Мы переведём их в российский размер, международный и размер воротника рубашки.</p>
+      </div>
+      <div id="size-app"></div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="sec on-cream reviews" id="reviews" aria-labelledby="h-rev" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head" style="align-items:center">
+        <span class="mono">Отзывы с Яндекс Карт</span>
+        <h2 id="h-rev">Нам <span class="serif">доверяют</span></h2>
+        <div class="rv-score"><b>4,8</b><div><div class="st">★★★★★</div>20 оценок · 13 отзывов</div></div>
+      </div>
+    </div>
+    <div id="reviewsRows"></div>
+  </section>
+
+  <!-- SERVICE -->
+  <section class="sec" aria-labelledby="h-svc">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="mono">Сервис</span>
+        <h2 id="h-svc">Удобно <span class="serif">во всём</span></h2>
+        <p>Можно прийти и примерить, можно заказать доставку, можно оплатить частями.</p>
+      </div>
+      <div class="service">
+        <div class="svc"><svg viewBox="0 0 32 32"><circle cx="16" cy="10" r="5"/><path d="M6 28c1-7 5-10 10-10s9 3 10 10"/><path d="M16 18l-2 4 2 6 2-6z"/></svg><h3>Подбор образа</h3><p>Хозяйка магазина и консультанты помогут с размером, фасоном и сочетаниями.</p></div>
+        <div class="svc"><svg viewBox="0 0 32 32"><path d="M3 9h16v13H3zM19 13h6l4 5v4h-10z"/><circle cx="9" cy="24" r="2.5"/><circle cx="24" cy="24" r="2.5"/></svg><h3>Доставка</h3><p>Привезём заказ, если нет времени заехать. Условия уточняйте в WhatsApp.</p></div>
+        <div class="svc"><svg viewBox="0 0 32 32"><path d="M5 12l11-6 11 6v14H5z"/><path d="M12 26v-8h8v8"/></svg><h3>Самовывоз</h3><p>Отложим вещи и выдадим в магазине в удобное время.</p></div>
+        <div class="svc"><svg viewBox="0 0 32 32"><rect x="4" y="12" width="24" height="15" rx="1"/><path d="M4 17h24M16 12v15M16 12c-3-6-9-5-8-1s8 1 8 1 7 3 8-1-5-5-8 1"/></svg><h3>Подарочный сертификат</h3><p>Удобный подарок, когда не знаете размер.</p></div>
+        <div class="svc"><svg viewBox="0 0 32 32"><rect x="4" y="8" width="24" height="16" rx="2"/><path d="M4 13h24M8 19h6"/></svg><h3>Рассрочка</h3><p>Покупку можно разделить на части.</p></div>
+        <div class="svc"><svg viewBox="0 0 32 32"><path d="M16 4l3.5 7.5L28 12l-6 5.8 1.5 8.2L16 22l-7.5 4 1.5-8.2L4 12l8.5-.5z"/></svg><h3>Дисконтная система</h3><p>Постоянные покупатели получают скидки.</p></div>
+        <div class="svc"><svg viewBox="0 0 32 32"><rect x="5" y="5" width="22" height="22" rx="3"/><path d="M13 23V10h5a4 4 0 010 8h-5"/></svg><h3>Парковка</h3><p>Парковка у магазина, есть места для людей с инвалидностью.</p></div>
+        <div class="svc"><svg viewBox="0 0 32 32"><path d="M8 4h16v24H8z"/><path d="M12 9h8M12 14h8M12 19h5"/></svg><h3>Примерка</h3><p>Примерочная и большое зеркало в полный рост прямо в зале.</p></div>
+      </div>
+      <div class="pay" aria-label="Способы оплаты">
+        <span>Наличные</span><span>Банковская карта</span><span>СБП</span><span>QR-код</span><span>Банковский перевод</span><span>Рассрочка</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="sec" id="visit" aria-labelledby="h-visit" style="border-top:1px solid var(--line)">
+    <div class="wrap visit">
+      <figure class="frame" style="margin:0"><img src="assets/facade.jpg" alt="Вход в магазин Men’s: чёрная вывеска с золотыми буквами над коричневой дверью" loading="lazy"></figure>
+      <div>
+        <span class="mono gold">Ищите золотую вывеску</span>
+        <h2 id="h-visit" style="margin-top:18px">Приходите <span class="serif">на примерку</span></h2>
+        <div class="addr">
+          <div class="addr-row"><div><span class="mono">Адрес</span><span class="v">с. Бабаюрт, ул. Шпигуна, 47</span></div><button class="copy" data-copy="Республика Дагестан, с. Бабаюрт, ул. Шпигуна, 47">Копировать</button></div>
+          <div class="addr-row"><div><span class="mono">Телефон</span><span class="v">+7 928 050-44-44</span></div><button class="copy" data-copy="+79280504444">Копировать</button></div>
+          <div class="addr-row"><div><span class="mono">WhatsApp</span><span class="v">+7 929 874-29-74</span></div><button class="copy" data-copy="+79298742974">Копировать</button></div>
+          <div class="addr-row" style="display:block"><span class="mono">Часы работы · <span data-status-text>без выходных</span></span><div class="hours" id="hours"></div></div>
+        </div>
+        <div class="visit-actions">
+          <a class="btn" href="https://yandex.ru/maps/org/men_s/36197489129/" target="_blank" rel="noopener" data-magnetic>Маршрут в Яндекс Картах</a>
+          <a class="btn ghost" href="https://wa.me/79298742974" target="_blank" rel="noopener" data-magnetic>Написать</a>
+          <a class="btn ghost" href="https://www.instagram.com/magazin_mens_/" target="_blank" rel="noopener" data-magnetic>Instagram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <svg class="big-word" id="bigWord" aria-hidden="true"></svg>
+    <div class="foot-row">
+      <span>© Men’s — мужская одежда, Бабаюрт</span>
+      <span><a href="https://www.instagram.com/magazin_mens_/" target="_blank" rel="noopener">@magazin_mens_</a> · <a href="https://taplink.cc/magazinmens" target="_blank" rel="noopener">taplink</a> · <a href="https://yandex.ru/maps/org/men_s/36197489129/" target="_blank" rel="noopener">Яндекс Карты</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="mbar">
+  <a class="btn" href="https://wa.me/79298742974" target="_blank" rel="noopener">WhatsApp</a>
+  <a class="btn ghost" href="#visit">Как найти</a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script type="module">
+/* Men’s — Бабаюрт. Vanilla + React (htm) islands, GSAP/ScrollTrigger, Lenis, Three.js */
+const WA = '79298742974';
+const GLYPHS = {"w":3030,"g":[[[[68,0],[205,0],[205,554],[398,0],[510,0],[703,554],[703,0],[840,0],[840,739],[652,739],[455,179],[256,739],[68,739]]],[[[988,0],[1385,0],[1385,131],[1125,131],[1125,303],[1374,303],[1374,434],[1125,434],[1125,608],[1385,608],[1385,739],[988,739]]],[[[1528,0],[1665,0],[1665,537],[1974,0],[2127,0],[2127,739],[1990,739],[1990,201],[1684,739],[1528,739]]],[[[2292,466],[2316.9,467.6],[2339.2,472.3],[2359.1,480.0],[2376.4,490.4],[2391.1,503.2],[2403.2,518.5],[2412.7,535.9],[2419.5,555.2],[2423.6,576.3],[2425.0,599.0],[2425,739],[2292,739],[2292,611],[2350,611],[2350.3,608.9],[2350.5,606.8],[2350.7,604.8],[2350.8,602.8],[2350.9,600.9],[2350.9,599.0],[2351.0,597.3],[2351.0,595.7],[2351.0,594.3],[2351.0,593.0],[2350.5,583.0],[2348.9,574.1],[2346.2,566.1],[2342.3,559.1],[2337.2,552.9],[2330.9,547.5],[2323.3,542.9],[2314.3,539.0],[2303.9,535.7],[2292.0,533.0]]],[[[2504,211],[2510.2,170.7],[2521.4,133.9],[2537.2,100.9],[2557.3,71.7],[2581.2,46.5],[2608.8,25.5],[2639.4,8.9],[2673.0,-3.1],[2708.9,-10.5],[2747.0,-13.0],[2785.9,-10.0],[2822.6,-1.2],[2856.6,12.9],[2887.5,31.8],[2914.9,55.2],[2938.2,82.7],[2957.2,113.7],[2971.2,147.9],[2980.0,184.8],[2983.0,224.0],[2981.7,253.0],[2977.5,280.0],[2970.1,305.3],[2959.0,328.9],[2943.8,351.0],[2924.0,371.8],[2899.4,391.5],[2869.5,410.1],[2833.8,427.9],[2792.0,445.0],[2773.0,452.1],[2757.6,457.8],[2745.3,462.5],[2735.8,466.1],[2728.5,469.0],[2723.0,471.3],[2718.9,473.1],[2715.6,474.8],[2712.8,476.3],[2710.0,478.0],[2702.3,483.3],[2695.4,488.9],[2689.2,494.9],[2683.9,501.2],[2679.4,507.8],[2675.7,514.6],[2672.8,521.8],[2670.7,529.3],[2669.4,537.0],[2669.0,545.0],[2669.9,557.8],[2672.6,569.7],[2676.9,580.6],[2682.8,590.4],[2690.1,599.0],[2698.8,606.3],[2708.7,612.1],[2719.8,616.4],[2731.9,619.1],[2745.0,620.0],[2758.3,619.2],[2770.4,616.7],[2781.4,612.6],[2791.2,606.9],[2799.8,599.8],[2807.1,591.1],[2813.1,580.9],[2817.8,569.3],[2821.1,556.3],[2823.0,542.0],[2965,542],[2960.4,579.5],[2951.0,613.8],[2937.1,644.7],[2919.2,672.1],[2897.5,695.8],[2872.5,715.5],[2844.5,731.2],[2813.8,742.6],[2780.9,749.6],[2746.0,752.0],[2711.1,749.3],[2677.9,741.4],[2647.1,728.8],[2618.9,711.8],[2593.9,690.9],[2572.4,666.5],[2554.9,639.0],[2541.9,608.8],[2533.8,576.3],[2531.0,542.0],[2532.6,514.8],[2537.5,488.9],[2545.6,464.6],[2556.7,441.7],[2570.9,420.5],[2588.0,401.0],[2608.1,383.2],[2631.0,367.2],[2656.6,353.1],[2685.0,341.0],[2711.8,330.9],[2733.8,322.5],[2751.7,315.6],[2766.1,309.8],[2777.5,305.0],[2786.7,300.8],[2794.2,296.8],[2800.6,292.9],[2806.7,288.7],[2813.0,284.0],[2819.3,278.6],[2825.0,272.6],[2830.0,266.0],[2834.5,258.9],[2838.2,251.4],[2841.4,243.5],[2843.8,235.2],[2845.6,226.7],[2846.6,217.9],[2847.0,209.0],[2845.8,193.6],[2842.3,179.3],[2836.6,166.2],[2828.8,154.4],[2819.1,144.1],[2807.7,135.4],[2794.6,128.4],[2780.1,123.3],[2764.1,120.1],[2747.0,119.0],[2729.5,119.9],[2713.8,122.6],[2699.6,127.2],[2687.2,133.5],[2676.4,141.8],[2667.2,151.8],[2659.7,163.8],[2653.8,177.6],[2649.6,193.4],[2647.0,211.0]]]]};
+const HOURS = { open: 10, close: 18 }; // daily, per Yandex Maps (owner-verified)
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isDesktop = () => matchMedia('(min-width: 861px)').matches;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const hasGSAP = typeof window.gsap !== 'undefined';
+if (hasGSAP && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+/* ---------------- smooth scroll ---------------- */
+let lenis = null;
+if (!reduce && window.Lenis) {
+  lenis = new Lenis({ lerp: 0.11, smoothWheel: true });
+  if (hasGSAP) {
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  } else {
+    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const id = a.getAttribute('href'); if (id.length < 2) return;
+    const el = document.querySelector(id); if (!el) return;
+    e.preventDefault(); lenis.scrollTo(el, { offset: -70, duration: 1.4 });
+  }));
+}
+
+/* ---------------- open / closed status ---------------- */
+function storeNow() { // store time in Moscow (UTC+3)
+  const d = new Date(); return new Date(d.getTime() + (d.getTimezoneOffset() + 180) * 60000);
+}
+function renderStatus() {
+  const n = storeNow(), h = n.getHours() + n.getMinutes() / 60;
+  const open = h >= HOURS.open && h < HOURS.close;
+  const txt = open ? `Открыто до ${HOURS.close}:00` : `Закрыто · откроемся в ${HOURS.open}:00`;
+  $$('[data-status]').forEach(el => { el.classList.toggle('closed', !open); el.querySelector('span').textContent = txt; });
+  $$('[data-status-text]').forEach(el => el.textContent = (open ? 'сейчас открыто' : 'сейчас закрыто') + ', без выходных');
+  const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'], today = (n.getDay() + 6) % 7;
+  const box = $('#hours');
+  if (box) box.innerHTML = days.map((d, i) => `<div class="${i === today ? 'today' : ''}">${d}<b>${HOURS.open}–${HOURS.close}</b></div>`).join('');
+}
+renderStatus(); setInterval(renderStatus, 60000);
+
+/* ---------------- copy buttons ---------------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('.copy'); if (!b) return;
+  const t = b.dataset.copy, old = b.textContent;
+  const done = () => { b.textContent = 'Скопировано'; setTimeout(() => b.textContent = old, 1600); };
+  const fallback = () => { const v = b.parentElement.querySelector('.v'); if (!v) return; const r = document.createRange(); r.selectNodeContents(v); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Выделено — нажмите Ctrl+C'; setTimeout(() => b.textContent = old, 2200); };
+  try { navigator.clipboard.writeText(t).then(done, fallback); } catch (_) { fallback(); }
+});
+
+/* ---------------- cursor + magnetic ---------------- */
+(() => {
+  const c = $('.cursor'); if (!c || !matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
+  addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; });
+  (function loop() { cx += (x - cx) * .2; cy += (y - cy) * .2; c.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(loop); })();
+  document.addEventListener('pointerover', e => c.classList.toggle('big', !!e.target.closest('a,button,[role=slider],.item-card')));
+  if (!hasGSAP || reduce) return;
+  $$('[data-magnetic]').forEach(el => {
+    const qx = gsap.quickTo(el, 'x', { duration: .5, ease: 'power3' }), qy = gsap.quickTo(el, 'y', { duration: .5, ease: 'power3' });
+    el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); qx((e.clientX - r.left - r.width / 2) * .25); qy((e.clientY - r.top - r.height / 2) * .35); });
+    el.addEventListener('pointerleave', () => { qx(0); qy(0); });
+  });
+})();
+
+/* ---------------- nav ---------------- */
+(() => {
+  const nav = $('#nav'); let last = 0;
+  const on = () => { const y = scrollY; nav.classList.toggle('solid', y > 40); nav.classList.toggle('hide', y > last && y > 600); last = y; };
+  addEventListener('scroll', on, { passive: true }); on();
+})();
+
+/* ---------------- hero intro ---------------- */
+if (hasGSAP && !reduce) {
+  gsap.from('.hero h1 .line-mask > span', { yPercent: 105, duration: 1.1, ease: 'expo.out', stagger: .12, delay: .35 });
+  gsap.from('.hero-side > *', { y: 24, duration: .9, ease: 'power3.out', stagger: .1, delay: .6, clearProps: 'transform' });
+}
+
+/* ---------------- compare slider ---------------- */
+(() => {
+  const el = $('#compare'); if (!el) return;
+  let v = 50;
+  const set = p => { v = Math.max(0, Math.min(100, p)); el.style.setProperty('--x', v + '%'); el.setAttribute('aria-valuenow', Math.round(v)); };
+  const fromEvent = e => { const r = el.getBoundingClientRect(); set((e.clientX - r.left) / r.width * 100); };
+  let drag = false;
+  el.addEventListener('pointerdown', e => { drag = true; el.setPointerCapture(e.pointerId); fromEvent(e); });
+  el.addEventListener('pointermove', e => { if (drag) fromEvent(e); });
+  el.addEventListener('pointerup', () => drag = false);
+  el.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') set(v - 5); if (e.key === 'ArrowRight') set(v + 5); });
+  set(50);
+  if (hasGSAP && !reduce) {
+    const o = { p: 50 };
+    gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 70%', once: true } })
+      .to(o, { p: 18, duration: 1.1, ease: 'power2.inOut', onUpdate: () => !drag && set(o.p) })
+      .to(o, { p: 82, duration: 1.4, ease: 'power2.inOut', onUpdate: () => !drag && set(o.p) })
+      .to(o, { p: 50, duration: 1, ease: 'power2.inOut', onUpdate: () => !drag && set(o.p) });
+  }
+})();
+
+/* ---------------- hall tour ---------------- */
+(() => {
+  const scenes = [
+    { src: 'assets/hall.jpg', alt: 'Главный зал магазина Men’s', spots: [[80, 44, 'Поло на манекенах'], [31, 52, 'Головные уборы'], [27, 64, 'Рубашки'], [70, 61, 'Брюки и джинсы'], [8, 52, 'Трикотаж на полках'], [44, 56, 'Зеркало в полный рост']] },
+    { src: 'assets/outer.jpg', alt: 'Зал верхней одежды', spots: [[14, 42, 'Пуховики и жилеты'], [62, 29, 'Сумки и рюкзаки'], [88, 27, 'Худи и свитшоты'], [57, 60, 'Куртки'], [86, 56, 'Кофты на молнии']] },
+    { src: 'assets/shoes.jpg', alt: 'Обувная стена', spots: [[50, 36, 'Футболки'], [86, 60, 'Классические туфли'], [36, 56, 'Лоферы и мокасины'], [28, 70, 'Шлёпанцы'], [62, 74, 'Кроссовки в коробках']] },
+  ];
+  const box = $('#tourImg'); if (!box) return;
+  const img = box.querySelector('img');
+  function makeSpot(x, y, t) {
+    const d = document.createElement('div');
+    d.className = 'spot' + (x < 30 ? ' al' : x > 70 ? ' ar' : '') + (y < 15 ? ' below' : '');
+    d.style.left = x + '%'; d.style.top = y + '%';
+    d.innerHTML = `<button aria-label="${t}"></button><span>${t}</span>`;
+    d.querySelector('button').addEventListener('click', () => { $$('.spot', box).forEach(o => o !== d && o.classList.remove('show')); d.classList.toggle('show'); });
+    box.appendChild(d); return d;
+  }
+  const paint = i => {
+    const s = scenes[i];
+    $$('.spot', box).forEach(n => n.remove());
+    const show = () => {
+      img.src = s.src; img.alt = s.alt;
+      s.spots.forEach(([x, y, t], k) => {
+        const d = makeSpot(x, y, t);
+        if (hasGSAP && !reduce) gsap.from(d.querySelector('button'), { scale: 0, duration: .6, ease: 'back.out(2)', delay: .25 + k * .07 });
+      });
+    };
+    if (hasGSAP && !reduce) {
+      gsap.timeline().to(img, { clipPath: 'inset(0 0 100% 0)', duration: .45, ease: 'power2.in' })
+        .add(show).set(img, { scale: 1.12 })
+        .to(img, { clipPath: 'inset(0 0 0% 0)', scale: 1.04, duration: .9, ease: 'expo.out' });
+    } else show();
+    $$('.tour-tab').forEach(t => t.setAttribute('aria-selected', String(+t.dataset.i === i)));
+  };
+  img.style.clipPath = 'inset(0 0 0% 0)';
+  $$('.tour-tab').forEach(t => t.addEventListener('click', () => paint(+t.dataset.i)));
+  // initial spots without the wipe
+  scenes[0].spots.forEach(([x, y, t]) => makeSpot(x, y, t));
+})();
+
+/* ---------------- counters ---------------- */
+if (hasGSAP && !reduce) {
+  $$('[data-count]').forEach(el => {
+    const end = +el.dataset.count, dec = +(el.dataset.dec || 0), o = { v: 0 };
+    ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => gsap.to(o, { v: end, duration: 1.6, ease: 'power3.out', onUpdate: () => el.textContent = o.v.toFixed(dec).replace('.', ',') }) });
+  });
+}
+
+/* ---------------- reviews ---------------- */
+(() => {
+  const R = [
+    ['ИСМАИЛ Э.', 'декабрь 2024', 'Ассортимент стильный и разнообразный — от классики до более повседневных моделей. Вещи качественные, швы аккуратные, материалы приятные на ощупь.'],
+    ['Эльмира Метеева', 'август 2025', 'Самая лучшая хозяйка магазина Менс, самый лучший магазин во всём районе, всегда делает хорошие скидки, подбирает одежду клиентам сама.'],
+    ['Алженат А.', 'декабрь 2024', 'Замечательный магазин с качественной одеждой по приятным ценам. Вежливые консультанты помогли мне выбрать подарок.'],
+    ['Руфина М.', 'декабрь 2024', 'Отличный магазин. Можно одеться с ног до головы. Образы со вкусом помогут подобрать. Качественные вещи за доступную цену.'],
+    ['Знаток города', 'август 2025', 'Отличный, просторный магазин с качественными вещами, хорошими ценами. Советую.'],
+    ['Надир Алиев', 'декабрь 2024', 'Магазин нравится тем, что хорошие цены, качество на высшем уровне. Сам постоянный клиент.'],
+    ['No Name', 'декабрь 2024', 'Один из любимых магазинов. Качество, цена, клиентоориентированность всегда на высоком уровне.'],
+    ['Халжат Муталимова', 'декабрь 2024', 'Очень хороший, качественный товар! Много раз покупали и очень довольны покупками! И к тому же очень приветливые люди!'],
+    ['Эльвира Девеева', 'август 2025', 'Очень качественный товар, всё самое стильное и красивое.'],
+    ['Инкогнито 3993', 'декабрь 2024', 'Хороший магазин, цены приемлемые, качество — советую.'],
+    ['Мехрибан Д.', 'декабрь 2024', 'Очень много выбора и доступные цены.'],
+    ['Абдулазим Ш.', 'август 2025', 'Лучшие в своём деле.'],
+    ['Арсен Таилов', 'декабрь 2024', 'Рекомендую!'],
+  ];
+  const card = ([n, d, t]) => `<article class="rv"><p>«${t}»</p><footer><span><b>${n}</b><br>${d}</span><span class="st" aria-label="Отзыв с Яндекс Карт">Яндекс</span></footer></article>`;
+  const a = R.slice(0, 7), b = R.slice(7).concat(R.slice(0, 2));
+  const row = (list, cls) => `<div class="rv-row ${cls}">${list.map(card).join('')}${list.map(card).join('')}</div>`;
+  $('#reviewsRows').innerHTML = row(a, '') + row(b, 'rev');
+})();
+
+/* ---------------- footer word fill ---------------- */
+if (hasGSAP && !reduce) {
+  gsap.utils.toArray('.sec-head h2').forEach(h => gsap.fromTo(h, { y: 40 }, { y: 0, ease: 'none', scrollTrigger: { trigger: h, start: 'top bottom', end: 'top 60%', scrub: true } }));
+}
+
+/* ---------------- footer word: exact sign glyphs, always fits ---------------- */
+(() => {
+  const svg = $('#bigWord'); if (!svg) return;
+  const pad = 8, minY = -20, maxY = 760;
+  const d = GLYPHS.g.map(g => g.map(c => 'M' + c.map(p => `${p[0]},${(maxY - p[1]).toFixed(1)}`).join('L') + 'Z').join('')).join('');
+  const W = GLYPHS.w;
+  svg.setAttribute('viewBox', `${-pad} ${-pad} ${W + pad * 2} ${maxY - minY + pad * 2}`);
+  svg.innerHTML = `<defs><linearGradient id="bwGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3D98E"/><stop offset=".5" stop-color="#D6B05A"/><stop offset="1" stop-color="#8A6728"/></linearGradient>
+    <clipPath id="bwClip"><rect id="bwRect" x="${-pad}" y="${-pad}" width="0" height="${maxY - minY + pad * 2}"/></clipPath></defs>
+    <path class="o" d="${d}"/><path class="f" d="${d}" clip-path="url(#bwClip)"/>`;
+  const rect = svg.querySelector('#bwRect'), full = W + pad * 2;
+  const setP = p => rect.setAttribute('width', (Math.max(0, Math.min(1, p)) * full).toFixed(1));
+  if (!hasGSAP || reduce || !window.ScrollTrigger) { setP(1); return; }
+  ScrollTrigger.create({
+    trigger: svg, start: 'top bottom',
+    end: () => Math.min(ScrollTrigger.maxScroll(window), svg.getBoundingClientRect().bottom + scrollY - innerHeight * 0.9),
+    scrub: 0.4, onUpdate: s => setP(s.progress), onLeave: () => setP(1), invalidateOnRefresh: true,
+  });
+})();
+
+/* =================== React islands =================== */
+const { useState, useEffect, useRef, useMemo } = React;
+const html = htm.bind(React.createElement);
+
+const ITEMS = [
+  { id: 'shirt', t: 'Классическая рубашка', d: 'Хлопок, классический крой', price: '2 900 ₽', img: 'assets/shirt.jpg', cat: 'classic' },
+  { id: 'suit', t: 'Костюм тёмно-синий', d: 'Пиджак и брюки, подгоним по фигуре', price: 'по запросу', img: 'assets/suit.jpg', cat: 'classic' },
+  { id: 'polo', t: 'Поло и брюки-чинос', d: 'Повседневный комплект на тёплый сезон', price: 'по запросу', img: 'assets/polo.jpg', cat: 'casual' },
+  { id: 'sport', t: 'Жилет, футболка и брюки', d: 'Чёрный комплект из мягкой ткани', price: 'по запросу', img: 'assets/sport.jpg', cat: 'casual' },
+  { id: 'tee', t: 'Футболка и брюки', d: 'Тёмно-синий комплект с вышивкой', price: 'по запросу', img: 'assets/tee.jpg', cat: 'casual' },
+  { id: 'knit', t: 'Джемперы и поло с длинным рукавом', d: 'Трикотаж: десятки цветов', price: 'по запросу', img: 'assets/knit.jpg', cat: 'casual' },
+  { id: 'outer', t: 'Пуховики и куртки', d: 'Верхняя одежда на зиму и межсезонье', price: 'по запросу', img: 'assets/outer.jpg', cat: 'outer' },
+  { id: 'snk-black', t: 'Кроссовки чёрные', d: 'Беговая модель на каждый день', price: 'по запросу', img: 'assets/sneaker-2.jpg', cat: 'shoes' },
+  { id: 'snk-blue', t: 'Кроссовки голубые', d: 'Лёгкая сетка, мягкая подошва', price: 'по запросу', img: 'assets/sneaker-1.jpg', cat: 'shoes' },
+  { id: 'snk-low', t: 'Кеды низкие', d: 'Кожа, две пары шнурков в комплекте', price: 'по запросу', img: 'assets/sneaker-3.jpg', cat: 'shoes' },
+  { id: 'shoes', t: 'Туфли и лоферы', d: 'Классическая и летняя обувь', price: 'по запросу', img: 'assets/shoes.jpg', cat: 'shoes' },
+];
+const CATS = [['all', 'Всё'], ['classic', 'Классика'], ['casual', 'Casual'], ['outer', 'Верхняя одежда'], ['shoes', 'Обувь']];
+
+const Hanger = () => html`<svg className="hanger" viewBox="0 0 110 64" fill="none" aria-hidden="true">
+  <path d="M55 2c-6 0-9 4-9 8s3 6 9 9" stroke="#D6B05A" stroke-width="3" stroke-linecap="round"/>
+  <path d="M55 19L6 56c-3 2-1 6 3 6h92c4 0 6-4 3-6L55 19z" stroke="#C9CDCF" stroke-width="3.2" stroke-linejoin="round"/>
+</svg>`;
+const Heart = ({ on }) => html`<svg viewBox="0 0 24 24" fill=${on ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7.5-4.6-9.5-9.3C1 8 3.4 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.6 0 6 3.5 4.5 7.2C19.5 16.4 12 21 12 21z"/></svg>`;
+
+function Catalog() {
+  const [cat, setCat] = useState('all');
+  const [bag, setBag] = useState(() => { try { return JSON.parse(localStorage.getItem('mens-bag') || '[]'); } catch (_) { return []; } });
+  const [open, setOpen] = useState(false);
+  const pinRef = useRef(null), trackRef = useRef(null), vpRef = useRef(null), progRef = useRef(null);
+  const list = useMemo(() => ITEMS.filter(i => cat === 'all' || i.cat === cat), [cat]);
+  useEffect(() => { try { localStorage.setItem('mens-bag', JSON.stringify(bag)); } catch (_) {} }, [bag]);
+  const toggle = id => setBag(b => b.find(x => x.id === id) ? b.filter(x => x.id !== id) : [...b, { id, size: '' }]);
+
+  // horizontal pinned rail + hanger swing
+  useEffect(() => {
+    const track = trackRef.current, vp = vpRef.current; if (!track) return;
+    const items = [...track.querySelectorAll('.item')];
+    vp.style.setProperty('--track-w', track.scrollWidth + 'px');
+    let st, raf = 0;
+    // pendulum physics: each hanger swings from the rail and settles
+    const P = items.map((el, i) => ({ el, a: 0, v: i % 2 ? -1.2 : 1.6, m: 0.8 + (i % 3) * 0.15 }));
+    const step = () => {
+      let moving = false;
+      P.forEach(p => { p.v += -0.045 * p.a - 0.06 * p.v; p.a += p.v; if (Math.abs(p.a) > 0.02 || Math.abs(p.v) > 0.02) moving = true; p.el.style.setProperty('--swing', p.a.toFixed(2) + 'deg'); });
+      raf = moving ? requestAnimationFrame(step) : 0;
+    };
+    const kick = vel => { if (reduce) return; const imp = Math.max(-1.4, Math.min(1.4, vel / 1800)); P.forEach(p => { p.v += imp * p.m; p.v = Math.max(-3, Math.min(3, p.v)); }); if (!raf) raf = requestAnimationFrame(step); };
+    if (!reduce) raf = requestAnimationFrame(step);
+    if (hasGSAP && !reduce) {
+      if (isDesktop()) {
+        const dist = () => Math.max(0, track.scrollWidth - innerWidth);
+        st = gsap.to(track, {
+          x: () => -dist(), ease: 'none',
+          scrollTrigger: {
+            trigger: pinRef.current, start: 'top top+=40', end: () => '+=' + dist(), pin: true, scrub: 0.6, invalidateOnRefresh: true,
+            onUpdate: s => { kick(s.getVelocity()); progRef.current && progRef.current.style.setProperty('--p', (s.progress * 100).toFixed(1) + '%'); },
+          },
+        });
+      } else {
+        let lx = vp.scrollLeft, lt = performance.now();
+        const onS = () => { const now = performance.now(); const v = (vp.scrollLeft - lx) / Math.max(1, now - lt) * 1000; lx = vp.scrollLeft; lt = now; kick(-v); progRef.current && progRef.current.style.setProperty('--p', (vp.scrollLeft / Math.max(1, vp.scrollWidth - vp.clientWidth) * 100).toFixed(1) + '%'); };
+        vp.addEventListener('scroll', onS, { passive: true });
+        st = { kill: () => vp.removeEventListener('scroll', onS) };
+      }
+    }
+    window.ScrollTrigger && ScrollTrigger.refresh();
+    return () => { cancelAnimationFrame(raf); if (st) { st.scrollTrigger && st.scrollTrigger.kill(); st.kill && st.kill(); } hasGSAP && gsap.set(track, { x: 0 }); };
+  }, [list]);
+
+  return html`
+    <div className="rail-pin" ref=${pinRef}>
+      <div className="wrap rail-head">
+        <div className="rail-filters" role="group" aria-label="Фильтр по категориям">
+          ${CATS.map(([k, l]) => html`<button key=${k} className="chip" aria-pressed=${cat === k} onClick=${() => setCat(k)}>${l}</button>`)}
+        </div>
+        <span className="mono rail-count">${list.length} ${list.length === 1 ? 'позиция' : list.length < 5 ? 'позиции' : 'позиций'} · листайте</span>
+      </div>
+      <div className="rail-viewport" ref=${vpRef}>
+        <div className="rail-bar"></div>
+        <div className="rail-track" ref=${trackRef}>
+          ${list.map((it, i) => {
+            const on = !!bag.find(b => b.id === it.id);
+            return html`<article className="item" key=${it.id} style=${{ '--tag': (i % 2 ? -5 : 6) + 'deg' }}>
+              <${Hanger}/>
+              <div className="item-card"><img src=${it.img} alt=${it.t} loading="lazy"/>
+                <div className="price-tag">${it.price === 'по запросу' ? 'цена' : 'MEN’S'}<b>${it.price}</b></div>
+              </div>
+              <div className="item-meta">
+                <div><h3>${it.t}</h3><p>${it.d}</p></div>
+                <button className="keep" aria-pressed=${on} aria-label=${on ? 'Убрать из подборки' : 'Отложить для примерки'} onClick=${() => toggle(it.id)}><${Heart} on=${on}/></button>
+              </div>
+            </article>`;
+          })}
+        </div>
+      </div>
+      <div className="wrap">
+        <div className="rail-progress" ref=${progRef}><i></i></div>
+        <div className="rail-note"><span>Фото сделаны в нашем магазине. Наличие и размеры уточняйте: ассортимент обновляется каждый сезон.</span><span>♡ — отложить для примерки</span></div>
+      </div>
+    </div>
+    <button className="bag-btn" hidden=${bag.length === 0} onClick=${() => setOpen(true)}>Моя подборка <span className="n">${bag.length}</span></button>
+    ${open && html`<${Bag} bag=${bag} setBag=${setBag} onClose=${() => setOpen(false)}/>`}
+  `;
+}
+
+function Bag({ bag, setBag, onClose }) {
+  const [name, setName] = useState('');
+  const [how, setHow] = useState('visit');
+  const [when, setWhen] = useState('');
+  const ref = useRef(null);
+  useEffect(() => {
+    lenis && lenis.stop(); document.body.style.overflow = 'hidden';
+    if (hasGSAP && !reduce) gsap.from(ref.current, { xPercent: 100, duration: .55, ease: 'expo.out' });
+    const k = e => e.key === 'Escape' && onClose(); addEventListener('keydown', k);
+    return () => { lenis && lenis.start(); document.body.style.overflow = ''; removeEventListener('keydown', k); };
+  }, []);
+  const rows = bag.map(b => ({ ...b, item: ITEMS.find(i => i.id === b.id) })).filter(r => r.item);
+  const msg = [
+    'Здравствуйте! Пишу с сайта Men’s.',
+    how === 'visit' ? 'Хочу примерить в магазине, отложите, пожалуйста:' : 'Хочу заказать с доставкой:',
+    ...rows.map((r, i) => `${i + 1}. ${r.item.t}${r.size ? ` — размер ${r.size}` : ''} (${r.item.price})`),
+    when ? (how === 'visit' ? `Приду: ${when}` : `Адрес доставки: ${when}`) : '',
+    name ? `Меня зовут ${name}.` : '',
+  ].filter(Boolean).join('\n');
+  const href = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+  return html`
+    <div className="drawer-veil" onClick=${onClose}></div>
+    <aside className="drawer" ref=${ref} role="dialog" aria-modal="true" aria-label="Моя подборка">
+      <header><h3>Моя подборка</h3><button className="x" onClick=${onClose} aria-label="Закрыть">×</button></header>
+      ${rows.length === 0 ? html`<p className="empty">Пока пусто. Отметьте ♡ вещи в каталоге, и они появятся здесь.</p>` : html`
+        <div className="bag-list">
+          ${rows.map(r => html`<div className="bag-row" key=${r.id}>
+            <img src=${r.item.img} alt=""/>
+            <div><b>${r.item.t}</b><span className="bag-price">${r.item.price}</span>
+              <input id=${'size-' + r.id} placeholder="Размер (например, 50 или L)" value=${r.size} onInput=${e => setBag(bs => bs.map(x => x.id === r.id ? { ...x, size: e.target.value } : x))}/></div>
+            <button onClick=${() => setBag(bs => bs.filter(x => x.id !== r.id))}>Убрать</button>
+          </div>`)}
+        </div>
+        <div className="field"><label>Как удобнее</label>
+          <div className="seg"><button aria-pressed=${how === 'visit'} onClick=${() => setHow('visit')}>Примерю в магазине</button><button aria-pressed=${how === 'delivery'} onClick=${() => setHow('delivery')}>Доставка</button></div>
+        </div>
+        <div className="field"><label htmlFor="bag-when">${how === 'visit' ? 'Когда придёте' : 'Адрес доставки'}</label><input id="bag-when" value=${when} onInput=${e => setWhen(e.target.value)} placeholder=${how === 'visit' ? 'Например, завтра после обеда' : 'Село, улица, дом'}/></div>
+        <div className="field"><label htmlFor="bag-name">Ваше имя</label><input id="bag-name" value=${name} onInput=${e => setName(e.target.value)} placeholder="Как к вам обращаться"/></div>
+        <a className="btn send" href=${href} target="_blank" rel="noopener">Отправить в WhatsApp</a>
+        <small>Откроется WhatsApp с готовым сообщением. Отправку подтверждаете вы.</small>
+      `}
+    </aside>`;
+}
+
+const SIZES = [[44, 'XS', 88, 76], [46, 'S', 92, 80], [48, 'M', 96, 84], [50, 'L', 100, 88], [52, 'XL', 104, 92], [54, 'XXL', 108, 96], [56, '3XL', 112, 100], [58, '4XL', 116, 104], [60, '5XL', 120, 108], [62, '6XL', 124, 112]];
+function SizeFinder() {
+  const [chest, setChest] = useState(100), [waist, setWaist] = useState(88), [neck, setNeck] = useState(40);
+  const ru = Math.min(62, Math.max(44, Math.round(chest / 4) * 2));
+  const intl = (SIZES.find(s => s[0] === ru) || [])[1];
+  const collar = Math.round(neck + 1);
+  const w = Math.round(waist / 2.54);
+  const R = (id, label, v, set, min, max) => html`<div><label htmlFor=${id}>${label}: <output>${v} см</output></label><input id=${id} type="range" min=${min} max=${max} value=${v} onInput=${e => set(+e.target.value)}/></div>`;
+  return html`<div className="sizes">
+    <div className="finder">
+      <h3>Калькулятор размера</h3>
+      <div className="row">${R('chest', 'Грудь', chest, setChest, 84, 128)}${R('waist', 'Талия', waist, setWaist, 68, 124)}</div>
+      <div className="row">${R('neck', 'Шея', neck, setNeck, 35, 48)}</div>
+      <div className="result" aria-live="polite">
+        <div><b>${ru}</b><span>размер RU · ${intl}</span></div>
+        <div><b>${collar}</b><span>воротник рубашки</span></div>
+        <div><b>W${w}</b><span>брюки и джинсы</span></div>
+      </div>
+      <p className="hint">Сомневаетесь между двумя размерами? Отметьте вещь в каталоге и укажите оба, а мы подскажем по конкретной модели.</p>
+    </div>
+    <div className="tbl"><table>
+      <thead><tr><th>Размер RU</th><th>Междунар.</th><th>Грудь, см</th><th>Талия, см</th></tr></thead>
+      <tbody>${SIZES.map(s => html`<tr key=${s[0]} className=${s[0] === ru ? 'on' : ''}><td>${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td><td>${s[3]}</td></tr>`)}</tbody>
+    </table></div>
+  </div>`;
+}
+
+ReactDOM.createRoot($('#catalog-app')).render(html`<${Catalog}/>`);
+ReactDOM.createRoot($('#size-app')).render(html`<${SizeFinder}/>`);
+addEventListener('load', () => window.ScrollTrigger && ScrollTrigger.refresh());
+
+/* =================== Three.js signboard =================== */
+import('three').then(async THREE => {
+  const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
+  initSign(THREE, RoomEnvironment);
+}).catch(() => {});
+
+
+function initSign(THREE, RoomEnvironment) {
+  const stage = $('#sign'); if (!stage) return;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (_) { return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+  stage.appendChild(renderer.domElement);
+  document.documentElement.classList.add('webgl-on');
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+
+  const S = 10 / GLYPHS.w; // glyph units -> world
+  const BW = 12.6, BH = 4.5, BD = 0.32;
+  const group = new THREE.Group(); scene.add(group);
+
+  // board with subtitle painted on the face
+  const cv = document.createElement('canvas'); cv.width = 2048; cv.height = Math.round(2048 * BH / BW);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  const paint = () => {
+    const c = cv.getContext('2d'), W = cv.width, H = cv.height;
+    const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#222a2d'); g.addColorStop(1, '#14191b');
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    for (let i = 0; i < 9000; i++) { c.fillStyle = `rgba(255,255,255,${Math.random() * 0.025})`; c.fillRect(Math.random() * W, Math.random() * H, Math.random() * 3 + 1, 1); }
+    c.fillStyle = '#d7dbda'; c.textBaseline = 'middle';
+    c.font = '600 54px Manrope, Arial, sans-serif';
+    try { c.letterSpacing = '30px'; } catch (_) {}
+    const text = 'МУЖСКАЯ ОДЕЖДА', y = H * 0.83;
+    const tw = c.measureText(text).width, x0 = W * 0.115 + 14;
+    c.fillText(text, x0, y);
+    c.fillRect(x0 + tw + 10, y - 2, W * 0.885 - (x0 + tw + 10), 4);
+    tex.needsUpdate = true;
+  };
+  paint(); document.fonts && document.fonts.ready.then(paint);
+  const side = new THREE.MeshStandardMaterial({ color: 0x0f1314, roughness: .6, metalness: .3 });
+  const face = new THREE.MeshStandardMaterial({ map: tex, roughness: .62, metalness: .15 });
+  const board = new THREE.Mesh(new THREE.BoxGeometry(BW, BH, BD), [side, side, side, side, face, side]);
+  board.position.z = -BD / 2; group.add(board);
+
+  // gold letters, one mesh per glyph
+  const gold = new THREE.MeshStandardMaterial({ color: 0xe0b45a, metalness: 1, roughness: .26, envMapIntensity: 1.25 });
+  const letters = [];
+  const baseY = -0.55, offX = -5;
+  GLYPHS.g.forEach(contours => {
+    const shapes = contours.map(pts => new THREE.Shape(pts.map(p => new THREE.Vector2(p[0] * S + offX, p[1] * S + baseY))));
+    const geo = new THREE.ExtrudeGeometry(shapes, { depth: 0.34, bevelEnabled: true, bevelThickness: 0.035, bevelSize: 0.03, bevelSegments: 3, curveSegments: 6 });
+    geo.computeBoundingBox(); const bb = geo.boundingBox, cx = (bb.min.x + bb.max.x) / 2, cy = (bb.min.y + bb.max.y) / 2;
+    geo.translate(-cx, -cy, 0);
+    const m = new THREE.Mesh(geo, gold); m.position.set(cx, cy, 0.02); group.add(m); letters.push(m);
+  });
+
+  // lights: two warm downlights + a moving shine
+  scene.add(new THREE.AmbientLight(0xffffff, 0.15));
+  const key = new THREE.DirectionalLight(0xfff1d6, 1.6); key.position.set(-4, 6, 8); scene.add(key);
+  const shine = new THREE.PointLight(0xffe2a0, 60, 18, 1.6); shine.position.set(-8, 1.5, 3.2); scene.add(shine);
+
+  const fit = () => {
+    const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    const vFov = camera.fov * Math.PI / 180, needH = BH * 1.12, needW = BW * 1.06;
+    const dH = needH / 2 / Math.tan(vFov / 2), dW = needW / 2 / (Math.tan(vFov / 2) * camera.aspect);
+    camera.position.set(0, 0, Math.max(dH, dW)); camera.updateProjectionMatrix();
+  };
+  fit(); new ResizeObserver(fit).observe(stage);
+
+  // pointer parallax
+  let mx = 0, my = 0, tx = 0, ty = 0, intro = 1;
+  stage.addEventListener('pointermove', e => { const r = stage.getBoundingClientRect(); tx = (e.clientX - r.left) / r.width * 2 - 1; ty = (e.clientY - r.top) / r.height * 2 - 1; });
+  stage.addEventListener('pointerleave', () => { tx = 0; ty = 0; });
+
+  if (hasGSAP && !reduce) {
+    letters.forEach((m, i) => { m.position.z = -1.2; m.rotation.x = -1.2; m.scale.setScalar(.85); });
+    gsap.to(letters.map(m => m.position), { z: 0.02, duration: 1.4, ease: 'expo.out', stagger: .09, delay: .2 });
+    gsap.to(letters.map(m => m.rotation), { x: 0, duration: 1.6, ease: 'elastic.out(1,0.6)', stagger: .09, delay: .2 });
+    gsap.to(letters.map(m => m.scale), { x: 1, y: 1, z: 1, duration: 1.2, ease: 'expo.out', stagger: .09, delay: .2 });
+    gsap.fromTo(shine.position, { x: -9 }, { x: 9, duration: 2.6, ease: 'power2.inOut', delay: .9, onComplete: () => { intro = 0; } });
+    gsap.to(group.rotation, { x: -0.22, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to(group.position, { y: 1.2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  } else intro = 0;
+
+  let visible = true;
+  new IntersectionObserver(([e]) => visible = e.isIntersecting).observe(stage);
+  const clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop); if (!visible) return;
+    const t = clock.getElapsedTime();
+    mx += (tx - mx) * .06; my += (ty - my) * .06;
+    group.rotation.y = mx * 0.16; if (!hasGSAP || reduce) group.rotation.x = my * 0.08;
+    if (!intro) { shine.position.x = mx * 7 + Math.sin(t * .5) * 1.2; shine.position.y = 1.4 - my * 2; }
+    renderer.render(scene, camera);
+  })();
+}
+
+</script>
+</body></html>
